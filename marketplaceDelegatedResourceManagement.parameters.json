@@ -1,0 +1,58 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "mspOfferName": {
+            "value": "Alchemy Managed Services - Assessment"
+        },
+        "mspOfferDescription": {
+            "value": "Alchemy Managed Services Offer.  Welcome to TSM!"
+        },
+        "managedByTenantId": {
+            "value": "9abc553f-814d-485d-97cb-8cc2f0727a4b"
+        },
+        "authorizations": {
+            "value": [
+                {
+                    "principalId": "89ed6ad0-92af-4bd2-8ff4-3f0f05f76c70",
+                    "roleDefinitionId": "b24988ac-6180-42a0-ab88-20f7382dd24c",
+                    "principalIdDisplayName": "Tier 1 Support"
+                },
+                {
+                    "principalId": "02ee22a3-5837-4b6a-92ea-19027bb43c45",
+                    "roleDefinitionId": "b24988ac-6180-42a0-ab88-20f7382dd24c",
+                    "principalIdDisplayName": "Tier 2 Support"
+                },
+                {
+                    "principalId": "71791ef0-8c90-4456-b534-36ef10c5605b",
+                    "roleDefinitionId": "36243c78-bf99-498c-9df9-86d9f8d28608",
+                    "principalIdDisplayName": "Automation Service Principal"
+                },
+                {
+                    "principalId": "71791ef0-8c90-4456-b534-36ef10c5605b",
+                    "principalIdDisplayName": "Automation Service Principal",
+                    "roleDefinitionId": "18d7d88d-d35e-4fb5-a5c3-7773c20a72d9",
+                    "delegatedRoleDefinitionIds": [
+                        "17d1049b-9a84-46fb-8f53-869881c3d3ab",
+                        "9980e02c-c2be-4d73-94e8-173b1dc7cf3c"
+                        ]
+                }
+            ]
+        },
+            "marketplaceOffer": {
+            "value": "No"
+        },
+            "marketplacePublisherId": {
+            "value": "marketplace-test"
+        },
+            "marketplaceOfferId": {
+            "value": "fabrikam-assessment"
+        },
+            "marketplacePlanId": {
+            "value": "assessment"
+        },
+            "marketplacePlanVersion": {
+            "value": "2.0.0"
+        }        
+    }
+}
