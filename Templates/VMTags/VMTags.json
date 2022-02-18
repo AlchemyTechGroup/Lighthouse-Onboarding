@@ -40,8 +40,8 @@
                             "operations": [
                                 {
                                     "operation": "addOrReplace",
-                                    "field": "tags['managedByTenant']",
-                                    "value": "AlchemyLighthouse"
+                                    "field": "tags['ATGCustomer']",
+                                    "value": "XenFrame"
                                 }
                             ]
                         }
