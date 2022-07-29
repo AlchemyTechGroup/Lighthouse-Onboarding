@@ -18,11 +18,25 @@
           "description": "Location of the gallery."
         }
       },
+      "customerName": {
+        "type": "string",
+        "defaultValue": "ATGLHCustomer",
+        "metadata": {
+          "description": "ATGLHCustomer."
+        }
+      },
       "description": {
         "type": "string",
         "defaultValue": "ACG-LH-ATG-imagegallery",
         "metadata": {
           "description": "The description of this Azure Compute Gallery resource. This property is updatable."
+        }
+      },
+      "resourceTags": {
+        "type": "object",
+        "defaultValue": {
+          "managedByTenant": "AlchemyLighthouse",
+          "ATGcustomer": "parameters('customerName')",
         }
       }
     },
@@ -32,6 +46,7 @@
         "name": "[parameters('galleryName')]",
         "apiVersion": "2019-12-01",
         "location": "[parameters('location')]",
+        "tags": "[parameters('resourceTags')]",
         "properties": {
           "description": "[parameters('description')]"
         }
