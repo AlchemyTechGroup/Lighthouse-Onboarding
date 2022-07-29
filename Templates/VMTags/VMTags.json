@@ -9,11 +9,29 @@
         "customerName": {
             "type": "string",
             "defaultValue": "ATGLHCustomer"
-        }
+        },
+        "tagName": {
+            "type": "string",
+            "defaultValue": "ATGCustomer"
+        },
+          "tagValuesToIgnore":{
+             "type":"Array",
+             "metadata":{
+                "description":"An array of possible tag values to ignore when evaluating tag inheritance",
+                "displayName":"tagValuesToIgnore"
+             },
+             "defaultValue":[
+                "tbc",
+                "'tbc'",
+                "TBC",
+                "to_be_confirmed",
+                "to be confirmed"
+             ]
+          }
     },
     "variables": {
-        "policyDefinitionName": "CRUD-tags-def",
-        "policyAssignmentName": "CRUD-tags",
+        "policyDefinitionName": "ATG-CustomerTag-Definition",
+        "policyAssignmentName": "ATG-CustomerTags",
         "rbacContributor": "b24988ac-6180-42a0-ab88-20f7382dd24c"
     },
     "resources": [
@@ -32,6 +50,22 @@
                             {
                                 "field": "type",
                                 "equals": "Microsoft.Compute/virtualMachines"
+                            },
+					 {
+                               "exists":"true",
+                               "field":"[concat('tags[', parameters('tagName'), ']')]"
+                            },
+                            {
+                               "notEquals":"",
+                               "value":"[resourceGroup().tags[parameters('tagName')]]"
+                            },
+                            {
+                               "field":"[concat('tags[', parameters('tagName'), ']')]",
+                               "notEquals":"[resourceGroup().tags[parameters('tagName')]]"
+                            },
+                            {
+                               "notIn":"[parameters('tagValuesToIgnore')]",
+                               "value":"[resourceGroup().tags[parameters('tagName')]]"
                             }
                         ]
                     },
@@ -44,7 +78,7 @@
                             "operations": [
                                 {
                                     "operation": "addOrReplace",
-                                    "field": "tags['ATGCustomer']",
+                                    "field": "[concat('tags[', parameters('tagName'), ']')]",
                                     "value": "[parameters('customerName')]"
                                 }
                             ]
