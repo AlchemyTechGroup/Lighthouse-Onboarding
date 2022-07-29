@@ -36,7 +36,7 @@
         "type": "object",
         "defaultValue": {
           "managedByTenant": "AlchemyLighthouse",
-          "ATGcustomer": "parameters('customerName')",
+          "ATGcustomer": "[parameters('customerName')]",
         }
       }
     },
