@@ -2,6 +2,9 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "galleryName": {
-      "value": "acg-atg-imagegallery"
+      "value": "acg-lh-atg-imagegallery"
+    },
+  "description": {
+      "value": "Azure Compute Gallery used for image management via ATG"
     }
 }

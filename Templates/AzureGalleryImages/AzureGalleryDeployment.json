@@ -20,7 +20,7 @@
       },
       "description": {
         "type": "string",
-        "defaultValue": "ACG-ATG-imagegallery",
+        "defaultValue": "ACG-LH-ATG-imagegallery",
         "metadata": {
           "description": "The description of this Azure Compute Gallery resource. This property is updatable."
         }
