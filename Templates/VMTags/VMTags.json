@@ -10,24 +10,14 @@
             "type": "string",
             "defaultValue": "ATGLHCustomer"
         },
-        "tagName": {
+        "tagCustomerName": {
             "type": "string",
             "defaultValue": "ATGCustomer"
         },
-          "tagValuesToIgnore":{
-             "type":"Array",
-             "metadata":{
-                "description":"An array of possible tag values to ignore when evaluating tag inheritance",
-                "displayName":"tagValuesToIgnore"
-             },
-             "defaultValue":[
-                "tbc",
-                "'tbc'",
-                "TBC",
-                "to_be_confirmed",
-                "to be confirmed"
-             ]
-          }
+        "tagName": {
+            "type": "string",
+            "defaultValue": "ManagedByTenant"
+        }
     },
     "variables": {
         "policyDefinitionName": "ATG-CustomerTag-Definition",
@@ -48,24 +38,24 @@
                     "if": {
                         "allOf": [
                             {
-                                "field": "type",
-                                "equals": "Microsoft.Compute/virtualMachines"
-                            },
-					 {
-                               "exists":"true",
-                               "field":"[concat('tags[', parameters('tagName'), ']')]"
-                            },
-                            {
-                               "notEquals":"",
-                               "value":"[resourceGroup().tags[parameters('tagName')]]"
+                                "allOf": [
+                                    {
+                                        "field": "type",
+                                        "equals": "Microsoft.Compute/virtualMachines"
+                                    }
+                                ]
                             },
                             {
-                               "field":"[concat('tags[', parameters('tagName'), ']')]",
-                               "notEquals":"[resourceGroup().tags[parameters('tagName')]]"
-                            },
-                            {
-                               "notIn":"[parameters('tagValuesToIgnore')]",
-                               "value":"[resourceGroup().tags[parameters('tagName')]]"
+                                "allOf": [
+                                    {
+                             	        "field": "type",
+                     		            "equals": "Microsoft.Resources/subscriptions/resourceGroups"
+                                    },
+                                    {
+                            	        "field": "[concat('tags[', parameters('tagName'), ']')]",
+                            	        "exists": "false"
+                                    }
+                                ]
                             }
                         ]
                     },
@@ -78,7 +68,7 @@
                             "operations": [
                                 {
                                     "operation": "addOrReplace",
-                                    "field": "[concat('tags[', parameters('tagName'), ']')]",
+                                    "field": "[concat('tags[', parameters('tagCustomerName'), ']')]",
                                     "value": "[parameters('customerName')]"
                                 }
                             ]
