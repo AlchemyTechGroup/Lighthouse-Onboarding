@@ -7,6 +7,9 @@
     },
     "description": {
         "value": "Azure Compute Gallery used for image management via ATG"
+    },
+    "customerName": {
+        "value": "dlind"
     }
   }
 }
