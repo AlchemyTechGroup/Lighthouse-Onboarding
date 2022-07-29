@@ -17,74 +17,28 @@
         "tagName": {
             "type": "string",
             "defaultValue": "ManagedByTenant"
+        },
+        "tagNameValue": {
+            "type": "string",
+            "defaultValue": "AlchemyLighthouse"
+        },
+        "ResourceGroupName": {
+            "type": "string",
+            "defaultValue": "rg-vm-lh-atg-images"
         }
     },
     "variables": {
-        "policyDefinitionName": "ATG-CustomerTag-Definition",
-        "policyAssignmentName": "ATG-CustomerTags",
-        "rbacContributor": "b24988ac-6180-42a0-ab88-20f7382dd24c"
+        "policyDefinitionName": "ATGLH Tags Policy - VM -Definition",
+        "policyAssignmentName": "ATGLH Tags Policy - VM",
+        "rbacContributor": "b24988ac-6180-42a0-ab88-20f7382dd24c",
+        "ResourceGroup": "[parameters('ResourceGroupName')]"
     },
     "resources": [
-        {
-            "type": "Microsoft.Authorization/policyDefinitions",
-            "apiVersion": "2018-03-01",
-            "name": "[variables('policyDefinitionName')]",
-            "properties": {
-                "description": "ATGLH Tags Policy - VM",
-                "displayName": "Policy to create and modify ATGLH tags",
-                "policyType": "Custom",
-                "mode": "Indexed",
-                "policyRule": {
-                    "if": {
-                        "allOf": [
-                            {
-                                "allOf": [
-                                    {
-                                        "field": "type",
-                                        "equals": "Microsoft.Compute/virtualMachines"
-                                    }
-                                ]
-                            },
-                            {
-                                "allOf": [
-                                    {
-                             	        "field": "type",
-                     		            "equals": "Microsoft.Resources/subscriptions/resourceGroups"
-                                    },
-                                    {
-                            	        "field": "[concat('tags[', parameters('tagName'), ']')]",
-                            	        "exists": "false"
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    "then": {
-                        "effect": "modify",
-                        "details": {
-                            "roleDefinitionIds": [
-                                "/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
-                            ],
-                            "operations": [
-                                {
-                                    "operation": "addOrReplace",
-                                    "field": "[concat('tags[', parameters('tagCustomerName'), ']')]",
-                                    "value": "[parameters('customerName')]"
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
         {
             "type": "Microsoft.Authorization/policyAssignments",
             "apiVersion": "2018-05-01",
             "name": "[variables('policyAssignmentName')]",
-            "location": "[deployment().location]",
-            "dependsOn": [
-                "[variables('policyDefinitionName')]"
-            ],
+            "location": "southcentralus",
             "identity": {
                 "type": "SystemAssigned"
             },
@@ -92,7 +46,10 @@
                 "description": "[variables('policyAssignmentName')]",
                 "displayName": "[variables('policyAssignmentName')]",
                 "policyDefinitionId": "[concat(subscription().id, '/providers/Microsoft.Authorization/policyDefinitions/', variables('policyDefinitionName'))]",
-                "scope": "[subscription().id]"
+                "scope": "[concat(subscription().id, '/resourceGroups/',variables('ResourceGroup'))]",
+                "metadata": {
+                    "assignedBy": "ATG Cloud Center of Excellence"
+                }
             }
         },
         {
@@ -105,7 +62,7 @@
             "properties": {
                 "roleDefinitionId": "[concat(subscription().id, '/providers/Microsoft.Authorization/roleDefinitions/', variables('rbacContributor'))]",
                 "principalType": "ServicePrincipal",
-                "delegatedManagedIdentityResourceId": "[if(not(empty(subscription().managedByTenants)), concat(subscription().id, '/providers/Microsoft.Authorization/policyAssignments/', variables('policyAssignmentName')), json('null'))]",
+                "delegatedManagedIdentityResourceId": "[if(not(empty(subscription().managedByTenants)), concat(subscription().id, '/resourceGroups/', variables('ResourceGroup'), '/providers/Microsoft.Authorization/policyAssignments/', variables('policyAssignmentName')), json('null'))]",
                 "principalId": "[toLower(reference(concat('/providers/Microsoft.Authorization/policyAssignments/', variables('policyAssignmentName')), '2018-05-01', 'Full' ).identity.principalId)]"
             }
         }
