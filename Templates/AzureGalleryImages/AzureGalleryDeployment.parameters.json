@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "galleryName": {
-        "value": "acg-lh-atg-imagegallery"
+        "value": "acg_lh_atg_imagegallery"
     },
     "description": {
         "value": "Azure Compute Gallery used for image management via ATG"
