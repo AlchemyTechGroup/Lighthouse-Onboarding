@@ -5,6 +5,10 @@
         "rbacGuid": {
             "type": "string",
             "defaultValue": "[newGuid()]"
+        },
+        "customerName": {
+            "type": "string",
+            "defaultValue": "ATGLHCustomer"
         }
     },
     "variables": {
@@ -18,8 +22,8 @@
             "apiVersion": "2018-03-01",
             "name": "[variables('policyDefinitionName')]",
             "properties": {
-                "description": "Policy to create and modify tags",
-                "displayName": "Policy to create and modify tags",
+                "description": "ATGLH Tags Policy - VM",
+                "displayName": "Policy to create and modify ATGLH tags",
                 "policyType": "Custom",
                 "mode": "Indexed",
                 "policyRule": {
@@ -41,7 +45,7 @@
                                 {
                                     "operation": "addOrReplace",
                                     "field": "tags['ATGCustomer']",
-                                    "value": "XenFrame"
+                                    "value": "[parameters('customerName')]"
                                 }
                             ]
                         }
