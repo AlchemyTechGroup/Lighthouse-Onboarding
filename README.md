@@ -1,4 +1,4 @@
-# Azure Delegated Resource Management from Azure Marketplace
+# Alchemy Managed Services
 
 This solution will link your subscription with Alchemy Tech Group, allowing the TSM service to assist in managing your environment.
 
