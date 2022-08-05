@@ -34,19 +34,17 @@ catch {
     write-output "login not successful: Error $error"
 }
 
+#grab data from event provider
 try {
-$listOperations = @{
-    Uri     = "https://management.azure.com/providers/microsoft.insights/eventtypes/management/values?api-version=2015-04-01&`$filter=eventTimestamp ge '$($lastrundate)' and eventTimestamp le '$($dateFormatNowForQuery)' "
-    #Uri     = "https://management.azure.com/providers/microsoft.insights/eventtypes/management/values?api-version=2015-04-01&`$filter=eventTimestamp ge '$($dateFormatForQuery)' and eventTimestamp le '$($dateFormatNowForQuery)' and eventChannels eq 'Admin, Operation' and resourceProvider eq 'Microsoft.Resources'"
-    #Uri     = "https://management.azure.com/providers/microsoft.insights/eventtypes/management/values?api-version=2015-04-01&`$filter=eventTimestamp ge '$($dateFormatForQuery)'"
-    Headers = @{
-        Authorization  = "Bearer $($token.AccessToken)"
+    $listOperations = @{
+        Uri     = "https://management.azure.com/providers/microsoft.insights/eventtypes/management/values?api-version=2015-04-01&`$filter=eventTimestamp ge '$($lastrundate)' and eventTimestamp le '$($dateFormatNowForQuery)' "
+        Headers = @{
+            Authorization  = "Bearer $($token.AccessToken)"
+        }
+        Method  = 'GET'
     }
-    Method  = 'GET'
-}
 
-$list = Invoke-RestMethod @listOperations
-
+    $list = Invoke-RestMethod @listOperations
 
 } 
 catch {
@@ -63,11 +61,6 @@ while($list.nextLink){
 
 
 $showOperations = $data;
-
-
-#write-output "count: $($data.count)"
-#$showOperations.operationName.value
-
 
 Write-Output "Delegation events for tenant: $($currentContext.Tenant.TenantId)"
 
@@ -96,28 +89,6 @@ if ($showOperations.operationName.value -eq "Microsoft.Resources/tenants/registe
         {
             write-output "storage queue add not successful: Error $error"
         }
-
-        <#
-        # write law message to analytics for alerting
-        try {
-            $writeLAWOperations = @{
-                Uri     = "https://prod-39.eastus2.logic.azure.com:443/workflows/b2f968f2238c4d9e8e11ae0846d85652/triggers/request/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Frequest%2Frun&sv=1.0&sig=J_B_uerBC5n1UXONJO28InqkbgAffLU4go7V0suXfuI"
-                Headers = @{
-                    'Content-Type' = "application/json"
-                    'TenantID'  = "ATG"
-                }
-                Method  = 'POST'
-                Body = $registerOutputdata | convertto-json
-            }
-            Invoke-RestMethod @writeLAWOperations
-        } 
-        catch 
-        {
-            write-output "LAW add not successful: Error $error"
-        }
-
-        #>
-
     }
 } else {
     write-output "no new registrations"
@@ -145,61 +116,10 @@ if ($showOperations.operationName.value -eq "Microsoft.Resources/tenants/unregis
         {
             write-output "storage queue add not successful: Error $error"
         }
-
-        <#
-        # write law message to analytics for alerting
-        try {
-            $writeLAWOperations = @{
-                Uri     = "https://prod-39.eastus2.logic.azure.com:443/workflows/b2f968f2238c4d9e8e11ae0846d85652/triggers/request/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Frequest%2Frun&sv=1.0&sig=J_B_uerBC5n1UXONJO28InqkbgAffLU4go7V0suXfuI"
-                Headers = @{
-                    'Content-Type' = "application/json"
-                    'TenantID'  = "ATG"
-                }
-                Method  = 'POST'
-                Body = $unregisterOutputdata | convertto-json
-            }
-            Invoke-RestMethod @writeLAWOperations
-        } 
-        catch 
-        {
-            write-output "LAW add not successful: Error $error"
-        }
-        #>
     }
 } else {
     write-output "no new unregistrations"
 }
-
-
-<#
-
-
-$body = @"
-{
-    Event: "An Azure customer has registered delegated resources to your Azure tenant",
-    DelegatedResourceId: "8b77715f-9f75-4358-bca4-a9eb49c2c4fb",
-    CustomerTenantId: "ffdadd88-6fea-45cb-bc14-29ab716d050f",
-    CustomerSubscriptionId: "ba597ea9-e4b1-4ef0-9aa9-80da6a5dd5c7",
-    CustomerDelegationStatus: "34929422-3c03-4942-9baa-1bfb541ac6e7",
-    EventTimeStamp: "2022-07-29T21:54:24.6925846Z"
-}
-"@
-
-$writeOperations = @{
-    Uri     = "https://prod-39.eastus2.logic.azure.com:443/workflows/b2f968f2238c4d9e8e11ae0846d85652/triggers/request/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Frequest%2Frun&sv=1.0&sig=J_B_uerBC5n1UXONJO28InqkbgAffLU4go7V0suXfuI"
-    Headers = @{
-        'Content-Type' = "application/json"
-        'TenantID'  = "ATG"
-    }
-    Method  = 'POST'
-    Body = $body
-}
-
-
-Invoke-RestMethod @writeOperations
-
-
-#>
 
 
 
