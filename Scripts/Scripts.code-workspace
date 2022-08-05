@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "AzFunctions\\LHOnboardingQueue"
+		},
+		{
+			"path": "AzFunctions\\LHOnboarding"
+		}
+	],
+	"settings": {
+		"powershell.cwd": "c:\\Users\\doug\\source\\repos\\Lighthouse-Onboarding\\Scripts"
+	}
+}

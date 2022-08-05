@@ -9,8 +9,12 @@ if ($Timer.IsPastDue) {
     Write-Host "PowerShell timer is running late!"
 }
 
+$lastrun = $Timer.ScheduleStatus.Last
+write-host "timer: $Timer"
+Timer.
 
-$GetDate = (Get-Date).AddDays((-7))
+
+$GetDate = (Get-Date).AddDays(-7)
 
 $dateFormatForQuery = $GetDate.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
 $dateFormatNowForQuery = (get-date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
@@ -18,6 +22,7 @@ write-output "Date: $dateFormatForQuery"
 
 try {
 # Getting Azure context for the API call
+select-azsubscription "f28acd55-79d1-49b7-a1ac-38e7939cf25f"
 $currentContext = Get-AzContext
 
 # Fetching new token
@@ -27,12 +32,13 @@ $token = $profileClient.AcquireAccessToken($currentContext.Tenant.Id)
 
 } 
 catch {
-    write-output "login not successful: Error $err"
+    write-output "login not successful: Error $error"
 }
 
 try {
 $listOperations = @{
-     Uri     = "https://management.azure.com/providers/microsoft.insights/eventtypes/management/values?api-version=2015-04-01&`$filter=eventTimestamp ge '$($dateFormatForQuery)' and eventTimestamp le '$($dateFormatNowForQuery)' and eventChannels eq 'Admin, Operation' and resourceProvider eq 'Microsoft.Resources'"
+    Uri     = "https://management.azure.com/providers/microsoft.insights/eventtypes/management/values?api-version=2015-04-01&`$filter=eventTimestamp ge '$($dateFormatForQuery)' and eventTimestamp le '$($dateFormatNowForQuery)' "
+    #Uri     = "https://management.azure.com/providers/microsoft.insights/eventtypes/management/values?api-version=2015-04-01&`$filter=eventTimestamp ge '$($dateFormatForQuery)' and eventTimestamp le '$($dateFormatNowForQuery)' and eventChannels eq 'Admin, Operation' and resourceProvider eq 'Microsoft.Resources'"
     #Uri     = "https://management.azure.com/providers/microsoft.insights/eventtypes/management/values?api-version=2015-04-01&`$filter=eventTimestamp ge '$($dateFormatForQuery)'"
     Headers = @{
         Authorization  = "Bearer $($token.AccessToken)"
@@ -45,7 +51,7 @@ $list = Invoke-RestMethod @listOperations
 
 } 
 catch {
-    write-output "api call not successful: Error $err"
+    write-output "api call not successful: Error $error"
 }
 
 # First link can be empty - and point to a next link (or potentially multiple pages)
@@ -60,36 +66,59 @@ while($list.nextLink){
 $showOperations = $data;
 
 
-write-output "count: $($data.count)"
-$showOperations.operationName.value
+#write-output "count: $($data.count)"
+#$showOperations.operationName.value
 
 
- Write-Output "Delegation events for tenant: $($currentContext.Tenant.TenantId)"
+Write-Output "Delegation events for tenant: $($currentContext.Tenant.TenantId)"
 
 if ($showOperations.operationName.value -eq "Microsoft.Resources/tenants/register/action") {
     $registerOutputs = $showOperations | Where-Object -FilterScript { $_.eventName.value -eq "EndRequest" -and $_.resourceType.value -and $_.operationName.value -eq "Microsoft.Resources/tenants/register/action" }
     foreach ($registerOutput in $registerOutputs) {
-        $eventDescription = $registerOutput.description | ConvertFrom-Json;
-    $registerOutputdata = [pscustomobject]@{
-        Event                    = "An Azure customer has registered delegated resources to your Azure tenant";
-        DelegatedResourceId      = $eventDescription.delegationResourceId; 
-        CustomerTenantId         = $eventDescription.subscriptionTenantId;
-        CustomerSubscriptionId   = $eventDescription.subscriptionId;
-        CustomerDelegationStatus = $registerOutput.status.value;
-        EventTimeStamp           = $registerOutput.eventTimestamp;
+            $eventDescription = $registerOutput.description | ConvertFrom-Json;
+            $registerOutputdata = [pscustomobject]@{
+            Event                    = "An Azure customer has registered delegated resources to your Azure tenant";
+            DelegatedResourceId      = $eventDescription.delegationResourceId; 
+            CustomerTenantId         = $eventDescription.subscriptionTenantId;
+            CustomerSubscriptionId   = $eventDescription.subscriptionId;
+            CustomerDelegationStatus = $registerOutput.status.value;
+            EventTimeStamp           = $registerOutput.eventTimestamp;
         }
         $registerOutputdata | Format-List
 
-        $writeOperations = @{
-            Uri     = "https://prod-39.eastus2.logic.azure.com:443/workflows/b2f968f2238c4d9e8e11ae0846d85652/triggers/request/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Frequest%2Frun&sv=1.0&sig=J_B_uerBC5n1UXONJO28InqkbgAffLU4go7V0suXfuI"
-            Headers = @{
-                'Content-Type' = "application/json"
-                'TenantID'  = "ATG"
-            }
-            Method  = 'POST'
-            Body = $registerOutputdata | converto-json
+
+
+        # write queue message to storage queue
+        try {
+            $outputMsg = $registerOutputdata
+            Push-OutputBinding -name msg -Value $outputMsg
+        } 
+        catch 
+        {
+            write-output "storage queue add not successful: Error $error"
         }
-        Invoke-RestMethod @writeOperations
+
+        <#
+        # write law message to analytics for alerting
+        try {
+            $writeLAWOperations = @{
+                Uri     = "https://prod-39.eastus2.logic.azure.com:443/workflows/b2f968f2238c4d9e8e11ae0846d85652/triggers/request/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Frequest%2Frun&sv=1.0&sig=J_B_uerBC5n1UXONJO28InqkbgAffLU4go7V0suXfuI"
+                Headers = @{
+                    'Content-Type' = "application/json"
+                    'TenantID'  = "ATG"
+                }
+                Method  = 'POST'
+                Body = $registerOutputdata | convertto-json
+            }
+            Invoke-RestMethod @writeLAWOperations
+        } 
+        catch 
+        {
+            write-output "LAW add not successful: Error $error"
+        }
+
+        #>
+
     }
 } else {
     write-output "no new registrations"
@@ -97,32 +126,50 @@ if ($showOperations.operationName.value -eq "Microsoft.Resources/tenants/registe
 if ($showOperations.operationName.value -eq "Microsoft.Resources/tenants/unregister/action") {
     $unregisterOutputs = $showOperations | Where-Object -FilterScript { $_.eventName.value -eq "EndRequest" -and $_.resourceType.value -and $_.operationName.value -eq "Microsoft.Resources/tenants/unregister/action" }
     foreach ($unregisterOutput in $unregisterOutputs) {
-        $eventDescription = $registerOutput.description | ConvertFrom-Json;
-        $unregisterOutputdata = [pscustomobject]@{
+            $eventDescription = $registerOutput.description | ConvertFrom-Json;
+            $unregisterOutputdata = [pscustomobject]@{
             Event                    = "An Azure customer has unregistered delegated resources from your Azure tenant";
             DelegatedResourceId      = $eventDescription.delegationResourceId;
             CustomerTenantId         = $eventDescription.subscriptionTenantId;
             CustomerSubscriptionId   = $eventDescription.subscriptionId;
             CustomerDelegationStatus = $unregisterOutput.status.value;
             EventTimeStamp           = $unregisterOutput.eventTimestamp;
-            }
+        }
         $unregisterOutputdata | Format-List
 
-        $writeOperations = @{
-            Uri     = "https://prod-39.eastus2.logic.azure.com:443/workflows/b2f968f2238c4d9e8e11ae0846d85652/triggers/request/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Frequest%2Frun&sv=1.0&sig=J_B_uerBC5n1UXONJO28InqkbgAffLU4go7V0suXfuI"
-            Headers = @{
-                'Content-Type' = "application/json"
-                'TenantID'  = "ATG"
-            }
-            Method  = 'POST'
-            Body = $unregisterOutputdata | converto-json
+        # write queue message to storage queue
+        try {
+            $outputMsg = $unregisterOutputdata
+            Push-OutputBinding -name msg -Value $outputMsg
+        } 
+        catch 
+        {
+            write-output "storage queue add not successful: Error $error"
         }
-        Invoke-RestMethod @writeOperations
+
+        <#
+        # write law message to analytics for alerting
+        try {
+            $writeLAWOperations = @{
+                Uri     = "https://prod-39.eastus2.logic.azure.com:443/workflows/b2f968f2238c4d9e8e11ae0846d85652/triggers/request/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Frequest%2Frun&sv=1.0&sig=J_B_uerBC5n1UXONJO28InqkbgAffLU4go7V0suXfuI"
+                Headers = @{
+                    'Content-Type' = "application/json"
+                    'TenantID'  = "ATG"
+                }
+                Method  = 'POST'
+                Body = $unregisterOutputdata | convertto-json
+            }
+            Invoke-RestMethod @writeLAWOperations
+        } 
+        catch 
+        {
+            write-output "LAW add not successful: Error $error"
+        }
+        #>
     }
 } else {
     write-output "no new unregistrations"
 }
-
 
 
 <#
