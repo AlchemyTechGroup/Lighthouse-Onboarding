@@ -21,8 +21,8 @@ write-output "Date: $dateFormatForQuery"
 
 try {
 # Getting Azure context for the API call
-select-azsubscription "f28acd55-79d1-49b7-a1ac-38e7939cf25f"
-$currentContext = Get-AzContext
+$null = select-azsubscription $env:homesubscription  | Out-Null
+$currentContext = Get-AzContext  | Out-Null
 
 # Fetching new token
 $azureRmProfile = [Microsoft.Azure.Commands.Common.Authentication.Abstractions.AzureRmProfileProvider]::Instance.Profile
@@ -59,7 +59,6 @@ while($list.nextLink){
     $list.nextLink = $list2.nextlink;
 }
 
-
 $showOperations = $data;
 
 Write-Output "Delegation events for tenant: $($currentContext.Tenant.TenantId)"
@@ -77,7 +76,6 @@ if ($showOperations.operationName.value -eq "Microsoft.Resources/tenants/registe
             EventTimeStamp           = $registerOutput.eventTimestamp;
         }
         $registerOutputdata | Format-List
-
 
 
         # write queue message to storage queue
@@ -120,8 +118,6 @@ if ($showOperations.operationName.value -eq "Microsoft.Resources/tenants/unregis
 } else {
     write-output "no new unregistrations"
 }
-
-
 
 # Write an information log with the current time.
 Write-Host "PowerShell timer trigger function ran! TIME: $currentUTCtime"

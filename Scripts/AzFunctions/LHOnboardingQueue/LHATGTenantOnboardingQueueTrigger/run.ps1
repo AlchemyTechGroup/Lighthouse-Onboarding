@@ -10,7 +10,7 @@ write-output "CustomerSubscriptionId: $($QueueItem.CustomerSubscriptionId)"
 write-output "CustomerDelegationStatus: $($QueueItem.CustomerDelegationStatus)"
 write-output "EventTimeStamp: $($QueueItem.EventTimeStamp)"
 
-
+<#
 # write law message to analytics for alerting
 try {
     $writeLAWOperations = @{
@@ -28,5 +28,5 @@ catch
 {
     write-output "LAW add not successful: Error $error"
 }
-
+#>
 Write-Output "Queue item insertion time: $($TriggerMetadata.InsertionTime)"
