@@ -10,9 +10,8 @@ if ($Timer.IsPastDue) {
 }
 
 $lastrun = $Timer.ScheduleStatus.Last
-write-host "timer: $Timer"
-Timer.
-
+$lastrundate = $lastrun.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
+Write-Output "lastrundate: $lastrundate"
 
 $GetDate = (Get-Date).AddDays(-7)
 
@@ -37,7 +36,7 @@ catch {
 
 try {
 $listOperations = @{
-    Uri     = "https://management.azure.com/providers/microsoft.insights/eventtypes/management/values?api-version=2015-04-01&`$filter=eventTimestamp ge '$($dateFormatForQuery)' and eventTimestamp le '$($dateFormatNowForQuery)' "
+    Uri     = "https://management.azure.com/providers/microsoft.insights/eventtypes/management/values?api-version=2015-04-01&`$filter=eventTimestamp ge '$($lastrundate)' and eventTimestamp le '$($dateFormatNowForQuery)' "
     #Uri     = "https://management.azure.com/providers/microsoft.insights/eventtypes/management/values?api-version=2015-04-01&`$filter=eventTimestamp ge '$($dateFormatForQuery)' and eventTimestamp le '$($dateFormatNowForQuery)' and eventChannels eq 'Admin, Operation' and resourceProvider eq 'Microsoft.Resources'"
     #Uri     = "https://management.azure.com/providers/microsoft.insights/eventtypes/management/values?api-version=2015-04-01&`$filter=eventTimestamp ge '$($dateFormatForQuery)'"
     Headers = @{
