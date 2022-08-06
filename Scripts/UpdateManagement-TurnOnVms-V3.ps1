@@ -96,9 +96,18 @@ foreach ($Automation in $AutomationResource)
 		write-output "no job found"
 	}
 }
+$varrg = $ResourceGroup
+$varaa = $AutomationAccount
+$varrunid = $runid
+
+
+write-output "varrg: $varrg"
+write-output "varaa: $varaa"
+write-output "varrunid: $varrunid"
 
 #This is used to store the state of VMs
-New-AzAutomationVariable  -ResourceGroupName $ResourceGroup -AutomationAccountName $AutomationAccount -Name $runId -Value "" -Encrypted $false
+New-AzAutomationVariable -ResourceGroupName $varrg -AutomationAccountName $varaa -Name "$varrunid" -Value "" -Encrypted $false
+get-azautomationvariable -ResourceGroupName $varrg -AutomationAccountName $varaa -Name "$varrunid"
 
 $updatedMachines = @()
 $startableStates = "stopped" , "stopping", "deallocated", "deallocating"
@@ -152,4 +161,9 @@ foreach($id in $jobsList)
 
 Write-output $updatedMachinesCommaSeperated
 #Store output in the automation variable
-Set-AzAutomationVariable -Name $runId -Value $updatedMachinesCommaSeperated -ResourceGroupName $ResourceGroup -AutomationAccountName $AutomationAccount -Encrypted $false
+
+get-azautomationvariable -ResourceGroupName $varrg -AutomationAccountName $varaa -Name "$varrunid"
+Set-AzAutomationVariable -ResourceGroupName $varrg -AutomationAccountName $varaa -Name "$varrunid" -Value $updatedMachinesCommaSeperated -Encrypted $false
+
+
+get-azautomationvariable -ResourceGroupName $varrg -AutomationAccountName $varaa -Name "$varrunid"

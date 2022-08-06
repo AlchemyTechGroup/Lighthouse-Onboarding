@@ -61,6 +61,7 @@ $AzureContext = get-azcontext
 $context = ConvertFrom-Json  $SoftwareUpdateConfigurationRunContext
 $runId = "PrescriptContext" + $context.SoftwareUpdateConfigurationRunId
 
+
 #https://github.com/azureautomation/runbooks/blob/master/Utility/ARM/Find-WhoAmI
 # In order to prevent asking for an Automation Account name and the resource group of that AA,
 # search through all the automation accounts in the subscription 
@@ -94,6 +95,9 @@ $vmIds = $variable -split ","
 $stoppableStates = "starting", "running"
 $jobIDs= New-Object System.Collections.Generic.List[System.Object]
 
+write-output "VMIDS:"
+$vmIds
+
 #This script can run across subscriptions, so we need unique identifiers for each VMs
 #Azure VMs are expressed by:
 # subscription/$subscriptionID/resourcegroups/$resourceGroup/providers/microsoft.compute/virtualmachines/$name
@@ -107,7 +111,7 @@ $vmIds | ForEach-Object {
     Write-Output ("Subscription Id: " + $subscriptionId)
     $mute = Select-AzSubscription -Subscription $subscriptionId
 
-    $vm = Get-AzM -ResourceGroupName $rg -Name $name -Status -DefaultProfile $mute
+    $vm = Get-AzVM -ResourceGroupName $rg -Name $name -Status -DefaultProfile $mute
 
     $state = ($vm.Statuses[1].DisplayStatus -split " ")[1]
     if($state -in $stoppableStates) {
