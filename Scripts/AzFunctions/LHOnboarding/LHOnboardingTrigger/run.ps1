@@ -9,9 +9,9 @@ if ($Timer.IsPastDue) {
     Write-Host "PowerShell timer is running late!"
 }
 
-if ($Timer.ScheduleStatus.Last) {
+if ($Timer.ScheduleStatus.Last -and $Timer.ScheduleStatus.Last -ne "0001-01-01T00:00:00Z") {
     $lastrun = $Timer.ScheduleStatus.Last
-    $dateFormatForQuery = $lastrun.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
+    $dateFormatForQuery = ($lastrun.ToUniversalTime()).addminutes(-5).ToString("yyyy-MM-ddTHH:mm:ssZ")
     #Write-Output "lastrundate: $lastrundate"
 } else {
     $GetDate = (Get-Date).AddDays(-1)

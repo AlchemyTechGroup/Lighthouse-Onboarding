@@ -7,7 +7,7 @@ $GetDate = (Get-Date).addhours(-1)
 $dateFormatForQuery = $GetDate.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
 $dateFormatNowForQuery = (get-date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
 
-#$dateFormatForQuery = "2022-08-05T00:00:00Z"
+$dateFormatForQuery = "2022-08-06T01:30:00Z"
 write-output "Date: $dateFormatForQuery"
 write-output "nowDate: $dateFormatNowForQuery"
 
@@ -40,20 +40,13 @@ $listOperations = @{
 Write-Output $listOperations.Uri
 
 $list = Invoke-RestMethod @listOperations
-
+<#
 write-output "----------------------------------------------------------------------------------------------------"
-
 write-output "nextlink: $($list.nextlink)"
 $list.value.operationName.value
 #$list.value | fl *
-
 write-output "----------------------------------------------------------------------------------------------------"
-
-
-
-#$list.value
-#$list.value.operationName.value
-
+#>
 
 # First link can be empty - and point to a next link (or potentially multiple pages)
 # While you get more data - continue fetching and add result
@@ -74,7 +67,7 @@ write-output "count: $($data.count)"
 $showOperations.operationName.value
 
 
- Write-Output "Delegation events for tenant: $($currentContext.Tenant.TenantId)"
+Write-Output "Delegation events for tenant: $($currentContext.Tenant.TenantId)"
 
 if ($showOperations.operationName.value -eq "Microsoft.Resources/tenants/register/action") {
     $registerOutputs = $showOperations | Where-Object -FilterScript { $_.eventName.value -eq "EndRequest" -and $_.resourceType.value -and $_.operationName.value -eq "Microsoft.Resources/tenants/register/action" }

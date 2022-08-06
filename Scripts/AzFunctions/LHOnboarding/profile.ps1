@@ -14,7 +14,6 @@
 if ($env:MSI_SECRET) {
     import-module az.accounts
     import-module az.resources
-    import-module aztable
     Disable-AzContextAutosave -Scope Process | Out-Null
     Connect-AzAccount -Identity
 }

@@ -29,6 +29,7 @@ $attemptlawaction = $null
 try {
     $attemptlawaction = $null
     $tableaction = $null
+    $action = $null
 
     if ($QueueItem.Event -eq "An Azure customer has registered delegated resources to your Azure tenant") {
         $action = "onboarded"
@@ -77,6 +78,8 @@ try {
             #update existing table row
             $row.action = $action
             $row.EventTimeStamp = $QueueItem.EventTimeStamp
+            write-output "newrowtoupdate:"
+            write-output $row
             $row | update-aztablerow -table $cloudtable
             $attemptlawaction = 1
             break; }
@@ -90,9 +93,11 @@ try {
             $attemptlawaction = 1
             break; }
         "remove" {
-            #remove (deprovisoin) existing table row
+            #remove (deprovision) existing table row
             $row.action = $action
             $row.EventTimeStamp = $QueueItem.EventTimeStamp
+            write-output "newrowtoupdate:"
+            write-output $row
             $row | update-aztablerow -table $cloudtable
             $attemptlawaction = 1
             break; }
