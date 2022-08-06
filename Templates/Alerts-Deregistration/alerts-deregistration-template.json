@@ -1,0 +1,63 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "scheduledqueryrules_Successful_delegation_removal_found_for_LH_ATG_name": {
+            "defaultValue": "Delegated REMOVAL found for LH ATG",
+            "type": "String"
+        },
+        "workspaces_atglighthousetenantdata_externalid": {
+            "defaultValue": "/subscriptions/f28acd55-79d1-49b7-a1ac-38e7939cf25f/resourceGroups/mpn-rg-automation/providers/microsoft.operationalinsights/workspaces/atglighthousetenantdata",
+            "type": "String"
+        },
+        "actionGroups_ATGLHTenantActionGroup_externalid": {
+            "defaultValue": "/subscriptions/f28acd55-79d1-49b7-a1ac-38e7939cf25f/resourceGroups/MPN-RG-Automation/providers/microsoft.insights/actionGroups/ATGLHTenantActionGroup",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "microsoft.insights/scheduledqueryrules",
+            "apiVersion": "2021-08-01",
+            "name": "[parameters('scheduledqueryrules_Successful_delegation_removal_found_for_LH_ATG_name')]",
+            "location": "eastus2",
+            "properties": {
+                "displayName": "[parameters('scheduledqueryrules_Successful_delegation_removal_found_for_LH_ATG_name')]",
+                "severity": 3,
+                "enabled": true,
+                "evaluationFrequency": "PT1H",
+                "scopes": [
+                    "[parameters('workspaces_atglighthousetenantdata_externalid')]"
+                ],
+                "targetResourceTypes": [
+                    "microsoft.operationalinsights/workspaces"
+                ],
+                "windowSize": "PT1H",
+                "overrideQueryTimeRange": "P2D",
+                "criteria": {
+                    "allOf": [
+                        {
+                            "query": "let StartTime=ago(1h);\nlet StopTime=now();\nTenantActivities_CL\n| where Event_s == \"An Azure customer has unregistered delegated resources to your Azure tenant\"\n| where TimeGenerated > StartTime and TimeGenerated <= StopTime\n",
+                            "timeAggregation": "Count",
+                            "dimensions": [],
+                            "operator": "GreaterThanOrEqual",
+                            "threshold": 1,
+                            "failingPeriods": {
+                                "numberOfEvaluationPeriods": 1,
+                                "minFailingPeriodsToAlert": 1
+                            }
+                        }
+                    ]
+                },
+                "autoMitigate": false,
+                "actions": {
+                    "actionGroups": [
+                        "[parameters('actionGroups_ATGLHTenantActionGroup_externalid')]"
+                    ],
+                    "customProperties": {}
+                }
+            }
+        }
+    ]
+}

@@ -62,6 +62,7 @@ while($list.nextLink){
 
 $showOperations = $data;
 $showOperations = $showOperations | sort-object -property eventTimestamp 
+$showOperations
 write-output "count: $($data.count)"
 
 Write-Output "Delegation events for tenant: $($currentContext.Tenant.TenantId)"
