@@ -13,6 +13,6 @@
     "version": "[2.*, 3.0.0)"
   },
   "managedDependency": {
-    "enabled": true
+    "enabled": false
   }
 }

@@ -70,12 +70,13 @@ try {
         CustomerDelegationStatus = "$($QueueItem.CustomerDelegationStatus)"
         EventTimeStamp = "$($QueueItem.EventTimeStamp)"
     }
-    
+
     switch ($action) {
     
         "update" {
             #update existing table row
             $row.action = $action
+            $row.EventTimeStamp = $QueueItem.EventTimeStamp
             $row | update-aztablerow -table $cloudtable
             $attemptlawaction = 1
             break; }
@@ -91,6 +92,7 @@ try {
         "remove" {
             #remove (deprovisoin) existing table row
             $row.action = $action
+            $row.EventTimeStamp = $QueueItem.EventTimeStamp
             $row | update-aztablerow -table $cloudtable
             $attemptlawaction = 1
             break; }
