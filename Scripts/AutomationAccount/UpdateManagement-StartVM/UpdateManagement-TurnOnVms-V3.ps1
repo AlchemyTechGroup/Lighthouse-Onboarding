@@ -140,7 +140,14 @@ $vmIds | ForEach-Object {
     }
 }
 
+write-output "updatedmachines: "
+$updatedMachines
+
 $updatedMachinesCommaSeperated = $updatedMachines -join ","
+
+write-output "updatedMachinesCommaSeperated: "
+$updatedMachinesCommaSeperated
+
 #Wait until all machines have finished starting before proceeding to the Update Deployment
 $jobsList = $jobIDs.ToArray()
 if ($jobsList)
@@ -159,9 +166,9 @@ foreach($id in $jobsList)
 
 }
 
-Write-output $updatedMachinesCommaSeperated
 #Store output in the automation variable
 
+Select-AzSubscription -SubscriptionId "f28acd55-79d1-49b7-a1ac-38e7939cf25f" | out-null
 get-azautomationvariable -ResourceGroupName $varrg -AutomationAccountName $varaa -Name "$varrunid"
 Set-AzAutomationVariable -ResourceGroupName $varrg -AutomationAccountName $varaa -Name "$varrunid" -Value $updatedMachinesCommaSeperated -Encrypted $false
 

@@ -80,18 +80,28 @@ foreach ($Automation in $AutomationResource)
 	}
 }
 
+$varrg = $ResourceGroup
+$varaa = $AutomationAccount
+$varrunid = $runid
 
+
+write-output "varrg: $varrg"
+write-output "varaa: $varaa"
+write-output "varrunid: $varrunid"
 
 #Retrieve the automation variable, which we named using the runID from our run context. 
 #See: https://docs.microsoft.com/en-us/azure/automation/automation-variables#activities
-$variable = Get-AzAutomationVariable -Name $runId -ResourceGroupName $ResourceGroup -AutomationAccountName $AutomationAccount
-if (!$variable) 
+$variable = get-azautomationvariable -ResourceGroupName $varrg -AutomationAccountName $varaa -Name "$varrunid"
+if (!$variable.Value) 
 {
     Write-Output "No machines to turn off"
     return
-}
+} 
 
-$vmIds = $variable -split ","
+write-output "variable: " 
+$variable
+
+$vmIds = $variable.value -split ","
 $stoppableStates = "starting", "running"
 $jobIDs= New-Object System.Collections.Generic.List[System.Object]
 
@@ -101,15 +111,21 @@ $vmIds
 #This script can run across subscriptions, so we need unique identifiers for each VMs
 #Azure VMs are expressed by:
 # subscription/$subscriptionID/resourcegroups/$resourceGroup/providers/microsoft.compute/virtualmachines/$name
-$vmIds | ForEach-Object {
-    $vmId =  $_
+foreach ($vmId in $vmIds) {
+    write-output "VmId:"
+    $vmId
     
     $split = $vmId -split "/";
     $subscriptionId = $split[2]; 
     $rg = $split[4];
     $name = $split[8];
-    Write-Output ("Subscription Id: " + $subscriptionId)
     $mute = Select-AzSubscription -Subscription $subscriptionId
+    
+    Write-Output ("Sub: " + $subscriptionId)
+    Write-Output ("rg: " + $rg)
+    Write-Output ("name: " + $name)
+    Write-Output ("mute: " + $mute)
+    
 
     $vm = Get-AzVM -ResourceGroupName $rg -Name $name -Status -DefaultProfile $mute
 
@@ -139,4 +155,6 @@ foreach($id in $jobsList)
     }
 }
 #Clean up our variables:
-Remove-AzAutomationVariable -AutomationAccountName $AutomationAccount -ResourceGroupName $ResourceGroup -name $runID
+
+Select-AzSubscription -SubscriptionId "f28acd55-79d1-49b7-a1ac-38e7939cf25f" | out-null
+#Remove-AzAutomationVariable -ResourceGroupName $varrg -AutomationAccountName $varaa -Name "$varrunid"
