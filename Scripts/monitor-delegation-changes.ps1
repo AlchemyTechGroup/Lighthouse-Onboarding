@@ -61,25 +61,26 @@ while($list.nextLink){
 
 
 $showOperations = $data;
-
-
+$showOperations = $showOperations | sort-object -property eventTimestamp 
 write-output "count: $($data.count)"
-$showOperations.operationName.value
-
 
 Write-Output "Delegation events for tenant: $($currentContext.Tenant.TenantId)"
 
-if ($showOperations.operationName.value -eq "Microsoft.Resources/tenants/register/action") {
-    $registerOutputs = $showOperations | Where-Object -FilterScript { $_.eventName.value -eq "EndRequest" -and $_.resourceType.value -and $_.operationName.value -eq "Microsoft.Resources/tenants/register/action" }
+    $registerOutputs = $showOperations | Where-Object -FilterScript { $_.eventName.value -eq "EndRequest" -and $_.resourceType.value -and $_.operationName.value -like "Microsoft.Resources/tenants/*register/action"} 
     foreach ($registerOutput in $registerOutputs) {
         
-        Write-Output "----------------------------------------"
-        Write-Output $registerOutput
-        Write-Output "----------------------------------------"
+        #Write-Output "----------------------------------------"
+        #Write-Output $registerOutput
+        #Write-Output "----------------------------------------"
         
         $eventDescription = $registerOutput.description | ConvertFrom-Json;
+        if ($registerOutput.operationName.value -eq "Microsoft.Resources/tenants/register/action") { 
+            $EventName = "An Azure customer has registered delegated resources to your Azure tenant";
+        } elseif ($registerOutput.operationName.value -eq "Microsoft.Resources/tenants/unregister/action") {
+            $EventName = "An Azure customer has unregistered delegated resources from your Azure tenant";
+        }
         $registerOutputdata = [pscustomobject]@{
-            Event                    = "An Azure customer has registered delegated resources to your Azure tenant";
+            Event                    = $EventName;
             DelegatedResourceId      = $eventDescription.delegationResourceId; 
             CustomerTenantId         = $eventDescription.subscriptionTenantId;
             CustomerSubscriptionId   = $eventDescription.subscriptionId;
@@ -88,32 +89,3 @@ if ($showOperations.operationName.value -eq "Microsoft.Resources/tenants/registe
         }
         $registerOutputdata | Format-List
     }
-} else {
-    write-output "no new registrations"
-}
-
-#process unregistrations
-if ($showOperations.operationName.value -eq "Microsoft.Resources/tenants/unregister/action") {
-    $unregisterOutputs = $showOperations | Where-Object -FilterScript { $_.eventName.value -eq "EndRequest" -and $_.resourceType.value -and $_.operationName.value -eq "Microsoft.Resources/tenants/unregister/action" }
-    foreach ($unregisterOutput in $unregisterOutputs) {
-        
-        Write-Output "----------------------------------------"
-        Write-Output $unregisterOutput
-        Write-Output "----------------------------------------"
-        
-        $eventDescription = $unregisterOutput.description | ConvertFrom-Json;
-        $unregisterOutputdata = [pscustomobject]@{
-            Event                    = "An Azure customer has unregistered delegated resources from your Azure tenant";
-            DelegatedResourceId      = $eventDescription.delegationResourceId;
-            CustomerTenantId         = $eventDescription.subscriptionTenantId;
-            CustomerSubscriptionId   = $eventDescription.subscriptionId;
-            CustomerDelegationStatus = $unregisterOutput.status.value;
-            EventTimeStamp           = $unregisterOutput.eventTimestamp;
-        }
-        $unregisterOutputdata | Format-List
-    }
-} else {
-    write-output "no new unregistrations"
-}
-
-

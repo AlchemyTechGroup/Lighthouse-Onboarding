@@ -72,12 +72,13 @@ try {
         EventTimeStamp = "$($QueueItem.EventTimeStamp)"
     }
 
-    switch ($action) {
+    switch ($tableaction) {
     
         "update" {
             #update existing table row
             $row.action = $action
             $row.EventTimeStamp = $QueueItem.EventTimeStamp
+            $row.CustomerDelegationStatus = $QueueItem.CustomerDelegationStatus
             write-output "newrowtoupdate:"
             write-output $row
             $row | update-aztablerow -table $cloudtable
@@ -88,7 +89,7 @@ try {
             Add-AzTableRow `
                 -table $cloudTable `
                 -partitionKey $QueueItem.CustomerTenantId `
-                -rowKey $QueueItem.CustomerSubscriptionId 
+                -rowKey $QueueItem.CustomerSubscriptionId `
                 -property $outval
             $attemptlawaction = 1
             break; }
@@ -96,6 +97,7 @@ try {
             #remove (deprovision) existing table row
             $row.action = $action
             $row.EventTimeStamp = $QueueItem.EventTimeStamp
+            $row.CustomerDelegationStatus = $QueueItem.CustomerDelegationStatus
             write-output "newrowtoupdate:"
             write-output $row
             $row | update-aztablerow -table $cloudtable
