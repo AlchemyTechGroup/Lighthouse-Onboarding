@@ -6,6 +6,13 @@
       "direction": "in",
       "queueName": "tenantactivities",
       "connection": "AzureWebJobsStorage"
+    },
+    {
+      "name": "LHTenantsTable",
+      "type": "table",
+      "direction": "out",
+      "tableName": "LHTenants",
+      "connection": "AzureWebJobsStorage"
     }
   ]
 }
