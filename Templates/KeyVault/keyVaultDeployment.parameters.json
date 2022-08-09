@@ -15,10 +15,10 @@
       ]
     },
     "enabledForTemplateDeployment": {
-      "value": "true" 
+      "value": true
     },
     "enabledForDeployment": {
-      "value": "true" 
+      "value": true
     },
     "customerName": {
       "value": "ATGCustomerName" 
