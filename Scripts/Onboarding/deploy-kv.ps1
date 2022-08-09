@@ -3,7 +3,7 @@ param (
   [string]$CustomerName
 )
 $rgname = "rg-kv-lh-atg-keyvault"
-$paramfile = Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/AlchemyTechGroup/Lighthouse-Onboarding/main/Templates/KeyVault/keyVaultDeployment.parameters.json' -Headers @{"Cache-Control"="no-cache"}
+$paramfile = Invoke-WebRequest -Headers @{"Cache-Control"="no-cache"} -Uri 'https://raw.githubusercontent.com/AlchemyTechGroup/Lighthouse-Onboarding/main/Templates/KeyVault/keyVaultDeployment.parameters.json' 
 
 $newparameters = $paramfile.content -replace "ATGCustomerName", "$CustomerName"
 $newparameters

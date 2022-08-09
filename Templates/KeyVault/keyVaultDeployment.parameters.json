@@ -23,18 +23,14 @@
     "customerName": {
       "value": "ATGCustomerName" 
     },
-      "vaultName": {
+    "vaultName": {
       "value": "kv_lh_atg_keyvault-"
     },
     "tags": {
-      "value": [
-        {
-          "ManagedByTenant": "AlchemyLighthouse"
-        },
-        {
-          "defaultValue": "AlchemyLighthouse"
-        }
-      ]
+      "value": {
+        "ManagedByTenant": "AlchemyLighthouse",
+        "ATGCustomer": "ATGCustomerName"
+      }
     }
   }
 }
