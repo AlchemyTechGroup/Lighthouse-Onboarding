@@ -1,9 +1,9 @@
 $location = "southcentralus"
 $customerName = "dlind"
 
-new-azsubscriptiondeployment -name lh-atg-onboarding -location $location `
-  -TemplateUri https://raw.githubusercontent.com/AlchemyTechGroup/Lighthouse-Onboarding/main/Templates/onboarding/LHATGOnboarding.json `
-  -customerName "$customerName" -verbose
+#new-azsubscriptiondeployment -name lh-atg-onboarding -location $location `
+#  -TemplateUri https://raw.githubusercontent.com/AlchemyTechGroup/Lighthouse-Onboarding/main/Templates/onboarding/LHATGOnboarding.json `
+#  -customerName "$customerName" -verbose
 
 #start-sleep -seconds 10
 
@@ -21,4 +21,4 @@ new-azsubscriptiondeployment -name lh-atg-onboarding -location $location `
 
 
 #& .\deploy-acg.ps1
-#& .\deploy-kv.ps1 -CustomerName $customerName
+& .\deploy-kv.ps1 -CustomerName $customerName

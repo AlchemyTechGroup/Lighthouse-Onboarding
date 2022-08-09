@@ -19,6 +19,9 @@
     },
     "enabledForDeployment": {
       "value": "true" 
+    },,
+    "customerName": {
+      "value": "ATGCustomerName" 
     },
       "vaultName": {
       "value": "kv_lh_atg_keyvault-"
