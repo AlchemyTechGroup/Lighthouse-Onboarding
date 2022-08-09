@@ -5,16 +5,25 @@
     "accessPolicies": {
       "value": [
         {
-          "objectId": "GEN-AZUREAD-AKS-OBJID",
-          "tenantId": "GEN-AZUREAD-AKS-TENANTID",
-          "permissions": {}
+          "objectId": "71791ef0-8c90-4456-b534-36ef10c5605b",
+          "tenantId": "9abc553f-814d-485d-97cb-8cc2f0727a4b",
+          "permissions": {
+            "keys": [ "get","list" ],
+            "secrets": [ "get","list" ]
+          }
         }
       ]
+    },
+    "enabledForTemplateDeployment": {
+      "value": "true" 
+    },
+    "enabledForDeployment": {
+      "value": "true" 
     },
     "galleryName": {
       "value": "acg_lh_atg_imagegallery" 
     },
-    "vaultName": {
+      "vaultName": {
       "value": "kv_lh_atg_keyvault-"
     },
     "tags": {
