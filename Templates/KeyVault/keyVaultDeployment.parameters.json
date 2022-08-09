@@ -24,7 +24,7 @@
       "value": "ATGCustomerName" 
     },
     "vaultName": {
-      "value": "kv_lh_atg_keyvault-"
+      "value": "kv_lh_atg_keyvault"
     },
     "tags": {
       "value": {
