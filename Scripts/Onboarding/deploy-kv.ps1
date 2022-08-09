@@ -14,4 +14,4 @@ add-content -path $tempfile -value $newparameters
 New-AzResourceGroupDeployment -Name LH-ATG-KeyVault  -ResourceGroupName $rgname `
   -TemplateUri           'https://raw.githubusercontent.com/AlchemyTechGroup/Lighthouse-Onboarding/main/Templates/KeyVault/keyVaultDeployment.json' `
   -TemplateParameterFile "$tempfile" `
-  -verbose -whatif
+  -verbose #-whatif
