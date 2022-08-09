@@ -168,7 +168,7 @@
                         "name": "accessPolicies",
                         "count": "[length(parameters('accessPolicies'))]",
                         "input": {
-                            "tenantId": "[parameters('accessPolicies')[copyIndex('accessPolicies')].tenantId]",
+                            "tenantId": "[subscription().tenantId]",
                             "objectId": "[parameters('accessPolicies')[copyIndex('accessPolicies')].objectId]",
                             "permissions": "[parameters('accessPolicies')[copyIndex('accessPolicies')].permissions]"
                         }
