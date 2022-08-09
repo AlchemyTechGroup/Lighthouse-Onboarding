@@ -10,14 +10,14 @@ start-sleep -seconds 10
 New-AzDeployment -Name lh-atg-tags -location "southcentralus" `
   <#-TemplateUri "https://raw.githubusercontent.com/AlchemyTechGroup/Lighthouse-Onboarding/main/Templates/VMTags/VMTags.json" #> `
   -TemplateFile ..\..\templates\VMTags\VMTags2.json `
-  -customerName $customerName -verbose
+  -customerName "$customerName" -verbose
 
 start-sleep -seconds 10
   
 New-AzResourceGroupDeployment -Name lh-atg-tags -ResourceGroupName rg-vm-lh-atg-images `
   <#-TemplateUri "https://raw.githubusercontent.com/AlchemyTechGroup/Lighthouse-Onboarding/main/Templates/VMTags/VMTags.json" #> `
   -TemplateFile ..\..\templates\VMTags\VMTags.json `
-  -customerName $customerName -verbose
+  -customerName "$customerName" -verbose
 
 
 #& .\deploy-acg.ps1
