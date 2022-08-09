@@ -65,7 +65,7 @@
     {
       "type": "Microsoft.Resources/resourceGroups",
       "apiVersion": "2020-06-01",
-      "name": "rg-acg-lh-atg-keyvault",
+      "name": "rg-kv-lh-atg-keyvault",
       "location": "[parameters('location')]",
       "tags": {
         "managedByTenant": "AlchemyLighthouse",

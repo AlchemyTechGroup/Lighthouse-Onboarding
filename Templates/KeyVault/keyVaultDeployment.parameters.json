@@ -20,9 +20,6 @@
     "enabledForDeployment": {
       "value": "true" 
     },
-    "galleryName": {
-      "value": "acg_lh_atg_imagegallery" 
-    },
       "vaultName": {
       "value": "kv_lh_atg_keyvault-"
     },
