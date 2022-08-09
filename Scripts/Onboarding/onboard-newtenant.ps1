@@ -20,3 +20,4 @@ New-AzResourceGroupDeployment -Name lh-atg-tags -ResourceGroupName rg-vm-lh-atg-
 
 
 & .\deploy-acg.ps1
+#& .\deploy-acg.ps1
