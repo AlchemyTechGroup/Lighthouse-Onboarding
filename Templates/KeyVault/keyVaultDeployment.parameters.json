@@ -6,7 +6,7 @@
       "value": [
         {
           "objectId": "71791ef0-8c90-4456-b534-36ef10c5605b",
-          "tenantId": "9abc553f-814d-485d-97cb-8cc2f0727a4b",
+          "tenantId": "8cd4f315-cddd-445c-af91-19587f0c4f4c",
           "permissions": {
             "keys": [ "get","list" ],
             "secrets": [ "get","list" ]
@@ -14,7 +14,7 @@
         },
         {
           "objectId": "02ee22a3-5837-4b6a-92ea-19027bb43c45",
-          "tenantId": "9abc553f-814d-485d-97cb-8cc2f0727a4b",
+          "tenantId": "8cd4f315-cddd-445c-af91-19587f0c4f4c",
           "permissions": {
             "keys": [
                 "Get",
