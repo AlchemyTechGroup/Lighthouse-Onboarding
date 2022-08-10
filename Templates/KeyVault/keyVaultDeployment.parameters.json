@@ -25,10 +25,7 @@
                 "Delete",
                 "Recover",
                 "Backup",
-                "Restore",
-                "GetRotationPolicy",
-                "SetRotationPolicy",
-                "Rotate"
+                "Restore"
             ],
             "secrets": [
                 "Get",
@@ -39,8 +36,24 @@
                 "Backup",
                 "Restore"
             ],
-            "certificates": []
-          }
+            "certificates": [
+                "Get",
+                "List",
+                "Update",
+                "Create",
+                "Import",
+                "Delete",
+                "Recover",
+                "Backup",
+                "Restore",
+                "ManageContacts",
+                "ManageIssuers",
+                "GetIssuers",
+                "ListIssuers",
+                "SetIssuers",
+                "DeleteIssuers"
+            ]
+        }
         }
       ]
     },
