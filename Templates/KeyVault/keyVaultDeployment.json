@@ -145,6 +145,12 @@
             "metadata": {
                 "description": "The Customer Name being deployed."
             }
+        },
+        "secretsObject": {
+          "type": "secureObject",
+          "metadata": {
+            "description": "Specifies all secrets {\"secretName\":\"\",\"secretValue\":\"\"} wrapped in a secure object."
+          }
         }
     },
     "variables": {
@@ -202,12 +208,27 @@
                     ]
                 }
             }
+        },
+        {
+          "copy": {
+            "name": "secrets",
+            "count": "[length(parameters('secretsObject').secrets)]"
+          },
+          "type": "Microsoft.KeyVault/vaults/secrets",
+          "apiVersion": "2021-04-01-preview",
+          "name": "[format('{0}/{1}', variables('CustomervaultName'), parameters('secretsObject').secrets[copyIndex()].secretName)]",
+          "properties": {
+            "value": "[parameters('secretsObject').secrets[copyIndex()].secretValue]"
+          },
+          "dependsOn": [
+            "[resourceId('Microsoft.KeyVault/vaults', variables('CustomervaultName'))]"
+          ]
         }
     ],
     "outputs": {
         "vaultName": {
             "type": "string",
-            "value": "[parameters('vaultName')]"
+            "value": "[variables('CustomervaultName')]"
         },
         "vaultResourceGroup": {
             "type": "string",
