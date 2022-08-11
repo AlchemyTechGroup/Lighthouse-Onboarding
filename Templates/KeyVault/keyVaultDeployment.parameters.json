@@ -14,7 +14,7 @@
         },
         {
           "objectId": "02ee22a3-5837-4b6a-92ea-19027bb43c45",
-          "tenantId": "8cd4f315-cddd-445c-af91-19587f0c4f4c",
+          "tenantId": "9abc553f-814d-485d-97cb-8cc2f0727a4b",
           "permissions": {
             "keys": [
                 "Get",
@@ -57,7 +57,7 @@
         },
         {
           "objectId": "7adc6cf0-3330-4530-838f-56840c3841ec",
-          "tenantId": "8cd4f315-cddd-445c-af91-19587f0c4f4c",
+          "tenantId": "9abc553f-814d-485d-97cb-8cc2f0727a4b",
           "permissions": {
             "keys": [
                 "Get",
@@ -100,7 +100,7 @@
         },
         {
           "objectId": "000eda96-f8e5-4892-be6d-bde98427b5be",
-          "tenantId": "8cd4f315-cddd-445c-af91-19587f0c4f4c",
+          "tenantId": "9abc553f-814d-485d-97cb-8cc2f0727a4b",
           "permissions": {
             "keys": [
                 "Get",
