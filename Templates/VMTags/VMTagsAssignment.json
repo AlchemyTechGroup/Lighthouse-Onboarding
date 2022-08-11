@@ -6,22 +6,6 @@
             "type": "string",
             "defaultValue": "[newGuid()]"
         },
-        "customerName": {
-            "type": "string",
-            "defaultValue": "ATGLHCustomer"
-        },
-        "tagCustomerName": {
-            "type": "string",
-            "defaultValue": "ATGCustomer"
-        },
-        "tagName": {
-            "type": "string",
-            "defaultValue": "ManagedByTenant"
-        },
-        "tagNameValue": {
-            "type": "string",
-            "defaultValue": "AlchemyLighthouse"
-        },
         "ResourceGroupName": {
             "type": "string",
             "defaultValue": "rg-vm-lh-atg-images"
