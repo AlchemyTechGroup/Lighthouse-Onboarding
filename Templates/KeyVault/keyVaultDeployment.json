@@ -154,7 +154,7 @@
         }
     },
     "variables": {
-           "CustomervaultName": "[concat(parameters('vaultName'),'-', parameters('customerName'))]"
+           "CustomervaultName": "[concat(parameters('vaultName'))]"
     },
     "resources": [
         {
