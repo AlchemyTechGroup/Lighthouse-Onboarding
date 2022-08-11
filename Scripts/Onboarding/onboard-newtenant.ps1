@@ -21,4 +21,4 @@ $customerName = "dlind"
 
 
 #& .\deploy-acg.ps1
-& .\deploy-kv.ps1 -CustomerName $customerName
+#& .\deploy-kv.ps1 -CustomerName $customerName
