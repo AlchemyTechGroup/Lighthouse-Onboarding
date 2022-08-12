@@ -9,6 +9,18 @@
       "ResourceGroupName": {
           "type": "string",
           "defaultValue": "rg-vm-lh-atg-images"
+      },
+      "policyParameters": {
+          "type": "object",
+          "metadata": {
+              "displayName": "Policy parameters",
+              "description": "Policy parameters as an object parameter type."
+          },
+          "defaultValue": {
+            "logAnalytics": {
+                "value": "/subscriptions/f28acd55-79d1-49b7-a1ac-38e7939cf25f/resourcegroups/defaultresourcegroup-eus/providers/microsoft.operationalinsights/workspaces/workspace-0a61a6da-13ac-4417-a095-ce7495977127-eus"
+            }
+          }
       }
   },
   "variables": {
@@ -33,7 +45,8 @@
               "scope": "[concat(subscription().id, '/resourceGroups/',variables('ResourceGroup'))]",
               "metadata": {
                   "assignedBy": "ATG Cloud Center of Excellence"
-              }
+              },
+              "parameters": "[parameters('policyParameters')]"
           }
       },
       {
