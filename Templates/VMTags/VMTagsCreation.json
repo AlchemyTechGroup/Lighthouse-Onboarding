@@ -114,6 +114,46 @@
                             {
                                 "field": "type",
                                 "equals": "Microsoft.Compute/virtualMachines"
+                            },
+                            {
+                                "field": "[concat('tags[', parameters('tagCustomerName'),  ']')]",
+                                "exists": "false"
+                            },
+                            {
+                                "field": "[concat('tags[', parameters('tagImgName'),  ']')]",
+                                "exists": "false"
+                            },
+                            {
+                                "field": "[concat('tags[', parameters('tagName'),  ']')]",
+                                "exists": "false"
+                            },
+                            {
+                                "field": "[concat('tags[', parameters('tag1Name'),  ']')]",
+                                "exists": "false"
+                            },
+                            {
+                                "field": "[concat('tags[', parameters('tag2Name'),  ']')]",
+                                "exists": "false"
+                            },
+                            {
+                                "field": "[concat('tags[', parameters('tag3Name'),  ']')]",
+                                "exists": "false"
+                            },
+                            {
+                                "field": "[concat('tags[', parameters('tag4Name'),  ']')]",
+                                "exists": "false"
+                            },
+                            {
+                                "field": "[concat('tags[', parameters('tag5Name'),  ']')]",
+                                "exists": "false"
+                            },
+                            {
+                                "field": "[concat('tags[', parameters('tag6Name'),  ']')]",
+                                "exists": "false"
+                            },
+                            {
+                                "field": "[concat('tags[', parameters('tag7Name'),  ']')]",
+                                "exists": "false"
                             }
                         ]
                     },
@@ -125,52 +165,52 @@
                             ],
                             "operations": [
                                 {
-                                    "operation": "addOrReplace",
+                                    "operation": "Add",
                                     "field": "[concat('tags[', parameters('tagCustomerName'), ']')]",
                                     "value": "[parameters('customerName')]"
                                 },
                                 {
-                                    "operation": "addOrReplace",
+                                    "operation": "Add",
                                     "field": "[concat('tags[', parameters('tagName'), ']')]",
                                     "value": "[parameters('tagNameValue')]"
                                 },
                                 {
-                                    "operation": "addOrReplace",
+                                    "operation": "Add",
                                     "field": "[concat('tags[', parameters('tag1Name'), ']')]",
                                     "value": "[parameters('tag1NameValue')]"
                                 },
                                 {
-                                    "operation": "addOrReplace",
+                                    "operation": "Add",
                                     "field": "[concat('tags[', parameters('tag2Name'), ']')]",
                                     "value": "[parameters('tag2NameValue')]"
                                 },
                                 {
-                                    "operation": "addOrReplace",
+                                    "operation": "Add",
                                     "field": "[concat('tags[', parameters('tag3Name'), ']')]",
                                     "value": "[parameters('tag3NameValue')]"
                                 },
                                 {
-                                    "operation": "addOrReplace",
+                                    "operation": "Add",
                                     "field": "[concat('tags[', parameters('tag4Name'), ']')]",
                                     "value": "[parameters('tag4NameValue')]"
                                 },
                                 {
-                                    "operation": "addOrReplace",
+                                    "operation": "Add",
                                     "field": "[concat('tags[', parameters('tag5Name'), ']')]",
                                     "value": "[parameters('tag5NameValue')]"
                                 },
                                 {
-                                    "operation": "addOrReplace",
+                                    "operation": "Add",
                                     "field": "[concat('tags[', parameters('tag6Name'), ']')]",
                                     "value": "[parameters('tag6NameValue')]"
                                 },
                                 {
-                                    "operation": "addOrReplace",
+                                    "operation": "Add",
                                     "field": "[concat('tags[', parameters('tag7Name'), ']')]",
                                     "value": "[parameters('tag7NameValue')]"
                                 },
                                 {
-                                    "operation": "addOrReplace",
+                                    "operation": "Add",
                                     "field": "[concat('tags[', parameters('tagImgName'), ']')]",
                                     "value": "[parameters('tagImgNameValue')]"
                                 }

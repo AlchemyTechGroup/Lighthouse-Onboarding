@@ -1,0 +1,15 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "vmName": {
+      "value": "iamge3"
+    },
+    "location": {
+      "value": "southcentralus"
+    },
+    "logAnalytics": {
+      "value": "5fee8ab8-4ec2-473f-a28f-2438c38f54dc"
+    }
+  }
+}

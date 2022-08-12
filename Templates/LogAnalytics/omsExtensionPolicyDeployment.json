@@ -1,0 +1,54 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+      "rbacGuid": {
+          "type": "string",
+          "defaultValue": "[newGuid()]"
+      },
+      "ResourceGroupName": {
+          "type": "string",
+          "defaultValue": "rg-vm-lh-atg-images"
+      }
+  },
+  "variables": {
+      "policyDefinitionName": "ATGLH Log Analytics Policy - VM - Definition",
+      "policyAssignmentName": "ATGLH Log Analytics Policy - VM",
+      "rbacContributor": "92aaf0da-9dab-42b6-94a3-d43ce8d16293",
+      "ResourceGroup": "[parameters('ResourceGroupName')]"
+  },
+  "resources": [
+      {
+          "type": "Microsoft.Authorization/policyAssignments",
+          "apiVersion": "2018-05-01",
+          "name": "[variables('policyAssignmentName')]",
+          "location": "southcentralus",
+          "identity": {
+              "type": "SystemAssigned"
+          },
+          "properties": {
+              "description": "[variables('policyAssignmentName')]",
+              "displayName": "[variables('policyAssignmentName')]",
+              "policyDefinitionId": "[concat(subscription().id, '/providers/Microsoft.Authorization/policyDefinitions/', variables('policyDefinitionName'))]",
+              "scope": "[concat(subscription().id, '/resourceGroups/',variables('ResourceGroup'))]",
+              "metadata": {
+                  "assignedBy": "ATG Cloud Center of Excellence"
+              }
+          }
+      },
+      {
+          "type": "Microsoft.Authorization/roleAssignments",
+          "apiVersion": "2019-04-01-preview",
+          "name": "[parameters('rbacGuid')]",
+          "dependsOn": [
+              "[variables('policyAssignmentName')]"
+          ],
+          "properties": {
+              "roleDefinitionId": "[concat(subscription().id, '/providers/Microsoft.Authorization/roleDefinitions/', variables('rbacContributor'))]",
+              "principalType": "ServicePrincipal",
+              "delegatedManagedIdentityResourceId": "[if(not(empty(subscription().managedByTenants)), concat(subscription().id, '/resourceGroups/', variables('ResourceGroup'), '/providers/Microsoft.Authorization/policyAssignments/', variables('policyAssignmentName')), json('null'))]",
+              "principalId": "[toLower(reference(concat('/providers/Microsoft.Authorization/policyAssignments/', variables('policyAssignmentName')), '2018-05-01', 'Full' ).identity.principalId)]"
+          }
+      }
+  ]
+}
