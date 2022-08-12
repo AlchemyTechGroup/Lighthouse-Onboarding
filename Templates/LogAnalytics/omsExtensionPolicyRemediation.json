@@ -1,0 +1,37 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+      "ResourceGroupName": {
+          "type": "string",
+          "defaultValue": "rg-vm-lh-atg-images"
+      },
+      "workspaceKey": {
+          "type": "securestring"
+      }
+  },
+  "variables": {
+      "policyDefinitionName": "ATGLH Log Analytics Policy - Definition",
+      "policyAssignmentName": "ATGLH Log Analytics Policy",
+      "rbacContributor": "92aaf0da-9dab-42b6-94a3-d43ce8d16293",
+      "ResourceGroup": "[parameters('ResourceGroupName')]"
+  },
+  "resources": [
+      {
+        "type": "Microsoft.PolicyInsights/remediations",
+        "apiVersion": "2021-10-01",
+        "name": "string",
+        "properties": {
+          "failureThreshold": {
+            "percentage": 1.0
+          },
+          "filters": {
+          },
+          "parallelDeployments": 10,
+          "policyAssignmentId": "[if(not(empty(subscription().managedByTenants)), concat(subscription().id, '/resourceGroups/', variables('ResourceGroup'), '/providers/Microsoft.Authorization/policyAssignments/', variables('policyAssignmentName')), json('null'))]",
+          "resourceCount": 100,
+          "resourceDiscoveryMode": "ReEvaluateCompliance"
+        }
+      }
+  ]
+}

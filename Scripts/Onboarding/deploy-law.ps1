@@ -19,22 +19,22 @@ set-azcontext -context $azContext
 
 #pause
 
-write-output "deploying policy definition"
-$response = New-AzDeployment -Name lh-atg-law -location "southcentralus" -logAnalytics $logAnalytics -ResourceGroupName $rgname `
+#write-output "deploying policy definition"
+#$response = New-AzDeployment -Name lh-atg-law -location "southcentralus" -logAnalytics $logAnalytics -ResourceGroupName $rgname `
   <#-TemplateUri "https://raw.githubusercontent.com/AlchemyTechGroup/Lighthouse-Onboarding/main/Templates/LogAnalytics/omsExtensionPolicy.json" #> `
-  -TemplateFile ..\..\templates\LogAnalytics\omsExtensionPolicy.json `
-  -verbose
+#  -TemplateFile ..\..\templates\LogAnalytics\omsExtensionPolicy.json `
+#  -verbose
 
-$response
+#$response
 
-if ($response.ProvisioningState -eq "succeeded") {
+#if ($response.ProvisioningState -eq "succeeded") {
     
     write-output "assigning policy; pausing for 10 seconds"
-    start-sleep -seconds 10
+#    start-sleep -seconds 10
 
     New-AzResourceGroupDeployment -Name lh-atg-law-deployment -ResourceGroupName $rgname `
     <#-TemplateUri "https://raw.githubusercontent.com/AlchemyTechGroup/Lighthouse-Onboarding/main/Templates/LogAnalytics/omsExtensionPolicyDeployment.json" #> `
     -TemplateFile ..\..\templates\LogAnalytics\omsExtensionPolicyDeployment.json `
     -workspaceKey (ConvertTo-SecureString -String "$primaryworkspacekey" -AsPlainText -Force) `
     -verbose
-}
+#}

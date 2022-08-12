@@ -1,25 +1,44 @@
 $location = "southcentralus"
 $customerName = "dlind"
 
-#new-azsubscriptiondeployment -name lh-atg-onboarding -location $location `
+
+#$rgresponse = new-azsubscriptiondeployment -name lh-atg-onboarding -location $location `
 #  -TemplateUri https://raw.githubusercontent.com/AlchemyTechGroup/Lighthouse-Onboarding/main/Templates/onboarding/LHATGOnboarding.json `
 #  -customerName "$customerName" -verbose
 
-#write-output "pausing for 10 seconds"
-#start-sleep -seconds 10
+#$rgresponse
 
-#New-AzDeployment -Name lh-atg-tags -location "southcentralus" `
+#if ($rgresponse.ProvisioningState -eq "succeeded") {
+#  write-output "ResourceGroup creation suceeded"
+#  write-output "pausing for 10 seconds"
+#  start-sleep -seconds 10    
+#}
+
+
+#$tagresponse = New-AzDeployment -Name lh-atg-tags -location "southcentralus" `
 #  <#-TemplateUri "https://raw.githubusercontent.com/AlchemyTechGroup/Lighthouse-Onboarding/main/Templates/VMTags/VMTagsCreation.json" #> `
 #  -TemplateFile ..\..\templates\VMTags\VMTagsCreation.json `
 #  -customerName "$customerName" -verbose
 
-#write-output "pausing for 10 seconds"
-#start-sleep -seconds 10
-  
-#New-AzResourceGroupDeployment -Name lh-atg-tags-deploy -ResourceGroupName rg-vm-lh-atg-images `
-#  <#-TemplateUri "https://raw.githubusercontent.com/AlchemyTechGroup/Lighthouse-Onboarding/main/Templates/VMTags/VMTagsAssignment.json" #> `
-#  -TemplateFile ..\..\templates\VMTags\VMTagsAssignment.json `
-#  -verbose
+#$tagresponse
+
+#if ($tagresponse.ProvisioningState -eq "succeeded") {
+        
+#  write-output "Tag Definition creation suceeded"
+#  write-output "pausing for 10 seconds"
+#  start-sleep -seconds 10    
+
+
+#    $tagpolicyresponse = New-AzResourceGroupDeployment -Name lh-atg-tags-deploy -ResourceGroupName rg-vm-lh-atg-images `
+#     <#-TemplateUri "https://raw.githubusercontent.com/AlchemyTechGroup/Lighthouse-Onboarding/main/Templates/VMTags/VMTagsAssignment.json" #> `
+#      -TemplateFile ..\..\templates\VMTags\VMTagsAssignment.json `
+#      -verbose
+
+#    $tagpolicyresponse  
+
+#    if ($tagpolicyresponse.ProvisioningState -eq "succeeded") {      
+#       write-output "Tag assignmednt creation suceeded"
+#}
 
 
 #& .\deploy-acg.ps1
