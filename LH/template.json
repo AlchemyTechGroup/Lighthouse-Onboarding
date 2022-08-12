@@ -40,6 +40,11 @@
      "principalIdDisplayName": "Alchemy Lighthouse - Tier 2"
     },
     {
+     "principalId": "02ee22a3-5837-4b6a-92ea-19027bb43c45",
+     "roleDefinitionId": "91c1777a-f3dc-4fae-b103-61d183457e46",
+     "principalIdDisplayName": "Alchemy Lighthouse - Tier 2"
+    },
+    {
      "principalId": "71791ef0-8c90-4456-b534-36ef10c5605b",
      "roleDefinitionId": "91c1777a-f3dc-4fae-b103-61d183457e46",
      "principalIdDisplayName": "Alchemy Lighthouse - Automation SP"
