@@ -1,4 +1,4 @@
-﻿$url = "https://raw.githubusercontent.com/AlchemyTechGroup/Lighthouse-Onboarding/main/marketplaceDelegatedResourceManagement.parameters.json"
+﻿$url = "https://raw.githubusercontent.com/AlchemyTechGroup/Lighthouse-Onboarding/main/Templates/LogAnalytics/omsExtensionPolicyRemediation.json"
 $escapedurl = [uri]::EscapeDataString($url)
 
 
