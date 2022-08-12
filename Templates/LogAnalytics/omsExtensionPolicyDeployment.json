@@ -10,22 +10,28 @@
           "type": "string",
           "defaultValue": "rg-vm-lh-atg-images"
       },
+      "workspaceKey": {
+          "type": "securestring"
+      },
       "policyParameters": {
           "type": "object",
           "metadata": {
               "displayName": "Policy parameters",
               "description": "Policy parameters as an object parameter type."
           },
-          "defaultValue": {
-            "logAnalytics": {
-                "value": "/subscriptions/f28acd55-79d1-49b7-a1ac-38e7939cf25f/resourcegroups/defaultresourcegroup-eus/providers/microsoft.operationalinsights/workspaces/workspace-0a61a6da-13ac-4417-a095-ce7495977127-eus"
+          "defaultValue": { 
+            "logAnalyticsWorkspaceID": {
+              "value": "5fee8ab8-4ec2-473f-a28f-2438c38f54dc"
+            },
+            "logAnalyticsWorkspaceKey": {
+              "value": "[parameters('workspaceKey')]"
             }
           }
       }
   },
   "variables": {
-      "policyDefinitionName": "ATGLH Log Analytics Policy - VM - Definition",
-      "policyAssignmentName": "ATGLH Log Analytics Policy - VM",
+      "policyDefinitionName": "ATGLH Log Analytics Policy - Definition",
+      "policyAssignmentName": "ATGLH Log Analytics Policy",
       "rbacContributor": "92aaf0da-9dab-42b6-94a3-d43ce8d16293",
       "ResourceGroup": "[parameters('ResourceGroupName')]"
   },

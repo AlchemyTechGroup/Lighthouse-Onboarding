@@ -46,7 +46,7 @@
           "apiVersion": "2021-09-01-preview",
           "name": "string",
           "location": "string",
-          "kind": "string",
+          "kind": "Windows",
           "properties": {
             "dataCollectionEndpointId": "string",
             "dataFlows": [

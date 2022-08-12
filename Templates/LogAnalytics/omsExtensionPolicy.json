@@ -34,8 +34,8 @@
         }
     },
     "variables": {
-        "policyDefinitionName": "ATGLH Log Analytics Policy - VM - Definition",
-        "policyAssignmentName": "ATGLH Log Analytics Policy - VM",
+        "policyDefinitionName": "ATGLH Log Analytics Policy - Definition",
+        "policyAssignmentName": "ATGLH Log Analytics Policy",
         "rbacContributor": "b24988ac-6180-42a0-ab88-20f7382dd24c",
         "ResourceGroup": "[parameters('ResourceGroupName')]"
     },
@@ -55,12 +55,18 @@
                     "category": "Monitoring"
                 },
                 "parameters": {
-                  "logAnalytics": {
+                  "logAnalyticsWorkspaceID": {
                     "type": "String",
                     "metadata": {
-                      "displayName": "Log Analytics workspace",
-                      "description": "Select Log Analytics workspace from dropdown list",
-                      "strongType": "omsWorkspace"
+                      "displayName": "Log Analytics workspaceID",
+                      "description": "Monitoring Agent Workspace ID extension name"
+                    }
+                  },
+                  "logAnalyticsWorkspaceKey": {
+                    "type": "String",
+                    "metadata": {
+                      "displayName": "Log Analytics workspaceKey",
+                      "description": "Monitoring Agent Workspace Key"
                     }
                   }
                 },
@@ -113,7 +119,10 @@
                                             "location": {
                                                 "type": "string"
                                             },
-                                            "logAnalytics": {
+                                            "logAnalyticsWorkspaceID": {
+                                              "type": "string"
+                                            },
+                                            "logAnalyticsWorkspaceKey": {
                                               "type": "string"
                                             }
                                         },
@@ -135,10 +144,10 @@
                                                     "typeHandlerVersion": "[[variables('vmExtensionTypeHandlerVersion')]",
                                                     "autoUpgradeMinorVersion": true,
                                                     "settings": {
-                                                      "workspaceId": "[[reference(parameters('logAnalytics'), '2015-03-20').customerId]"
+                                                      "workspaceId": "[[parameters('logAnalyticsWorkspaceID')]"
                                                     },
                                                     "protectedSettings": {
-                                                      "workspaceKey": "[[listKeys(parameters('logAnalytics'), '2015-03-20').primarySharedKey]"
+                                                      "workspaceKey": "[[parameters('logAnalyticsWorkspaceKey')]"
                                                     }
                                                 }
                                             }
@@ -160,8 +169,11 @@
                                         "vmName": {
                                             "value": "[[field('name')]"
                                         },
-                                        "logAnalytics": {
-                                          "value": "[[parameters('logAnalytics')]"
+                                        "logAnalyticsWorkspaceID": {
+                                          "value": "[[parameters('logAnalyticsWorkspaceID')]"
+                                        },
+                                        "logAnalyticsWorkspaceKey": {
+                                          "value": "[[parameters('logAnalyticsWorkspaceKey')]"
                                         }
                                     }
                                 }
