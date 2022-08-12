@@ -1,0 +1,140 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "DCRName": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 80,
+        "defaultValue": "[concat('DCR.', replace(parameters('location'), ' ', ''))]",
+        "metadata": {
+          "description": "The name of the DCR. The allowed characters are alphabetic, numeric and periods. The maximum length is 80 characters."
+        }
+      },
+      "location": {
+        "type": "string",
+        "defaultValue": "[resourceGroup().location]",
+        "metadata": {
+          "description": "Location of the DCR."
+        }
+      },
+      "customerName": {
+        "type": "string",
+        "defaultValue": "ATGLHCustomer",
+        "metadata": {
+          "description": "ATGLHCustomer."
+        }
+      },
+      "description": {
+        "type": "string",
+        "defaultValue": "DCR-LH-ATG-DCRRUle",
+        "metadata": {
+          "description": "The description of this DCR resource."
+        }
+      },
+      "resourceTags": {
+        "type": "object",
+        "defaultValue": {
+          "managedByTenant": "AlchemyLighthouse",
+          "ATGcustomer": "[parameters('customerName')]",
+        }
+      }
+    },
+    "resources": [
+        {
+          "type": "Microsoft.Insights/dataCollectionRules",
+          "apiVersion": "2021-09-01-preview",
+          "name": "string",
+          "location": "string",
+          "kind": "string",
+          "properties": {
+            "dataCollectionEndpointId": "string",
+            "dataFlows": [
+              {
+                "destinations": [ "string" ],
+                "outputStream": "string",
+                "streams": [ "string" ],
+                "transformKql": "string"
+              }
+            ],
+            "dataSources": {
+              "extensions": [
+                {
+                  "extensionName": "string",
+                  "extensionSettings": {},
+                  "inputDataSources": [ "string" ],
+                  "name": "string",
+                  "streams": [ "string" ]
+                }
+              ],
+              "iisLogs": [
+                {
+                  "logDirectories": [ "string" ],
+                  "name": "string",
+                  "streams": [ "string" ]
+                }
+              ],
+              "logFiles": [
+                {
+                  "filePatterns": [ "string" ],
+                  "format": "text",
+                  "name": "string",
+                  "settings": {
+                    "text": {
+                      "recordStartTimestampFormat": "string"
+                    }
+                  },
+                  "streams": [ "string" ]
+                }
+              ],
+              "performanceCounters": [
+                {
+                  "counterSpecifiers": [ "string" ],
+                  "name": "string",
+                  "samplingFrequencyInSeconds": "int",
+                  "streams": [ "string" ]
+                }
+              ],
+              "syslog": [
+                {
+                  "facilityNames": [ "string" ],
+                  "logLevels": [ "string" ],
+                  "name": "string",
+                  "streams": "Microsoft-Syslog"
+                }
+              ],
+              "windowsEventLogs": [
+                {
+                  "name": "string",
+                  "streams": [ "string" ],
+                  "xPathQueries": [ "string" ]
+                }
+              ]
+            },
+            "description": "string",
+            "destinations": {
+              "azureMonitorMetrics": {
+                "name": "string"
+              },
+              "logAnalytics": [
+                {
+                  "name": "string",
+                  "workspaceResourceId": "string"
+                }
+              ]
+            },
+            "streamDeclarations": {}
+          }
+        } 
+    ],
+    "outputs": {
+      "DCRResourceID": {
+        "type": "string",
+        "value": "[parameters('DCRName')]"
+      },
+      "location": {
+        "type": "string",
+        "value": "[parameters('location')]"
+      }
+    }
+  }
