@@ -4,7 +4,7 @@
     "parameters": {
       "location": {
         "type": "string",
-        "defaultValue": "southcentralus",
+        "defaultValue": "centralus",
         "metadata": {
           "description": "Location of the resource groups."
         }

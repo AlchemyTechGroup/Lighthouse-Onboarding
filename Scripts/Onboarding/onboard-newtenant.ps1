@@ -1,9 +1,10 @@
-$location = "southcentralus"
-$customerName = "dlind"
+$location = "centralus"
+$customerName = "Foley"
 
 
-#$rgresponse = new-azsubscriptiondeployment -name lh-atg-onboarding -location $location `
-#  -TemplateUri https://raw.githubusercontent.com/AlchemyTechGroup/Lighthouse-Onboarding/main/Templates/onboarding/LHATGOnboarding.json `
+#$rgresponse = new-azsubscriptiondeployment -name lh-atg-onboarding -location 'centralus' `
+#  <#-TemplateUri https://raw.githubusercontent.com/AlchemyTechGroup/Lighthouse-Onboarding/main/Templates/onboarding/LHATGOnboarding.json #> `
+#  -TemplateFile ..\..\templates\onboarding\LHATGOnboarding.json `
 #  -customerName "$customerName" -verbose
 
 #$rgresponse
@@ -15,7 +16,7 @@ $customerName = "dlind"
 #}
 
 
-#$tagresponse = New-AzDeployment -Name lh-atg-tags -location "southcentralus" `
+#$tagresponse = New-AzDeployment -Name lh-atg-tags -location 'centralus' `
 #  <#-TemplateUri "https://raw.githubusercontent.com/AlchemyTechGroup/Lighthouse-Onboarding/main/Templates/VMTags/VMTagsCreation.json" #> `
 #  -TemplateFile ..\..\templates\VMTags\VMTagsCreation.json `
 #  -customerName "$customerName" -verbose
@@ -41,6 +42,6 @@ $customerName = "dlind"
 #}
 
 
-#& .\deploy-acg.ps1
+& .\deploy-acg.ps1
 #& .\deploy-kv.ps1 -CustomerName $customerName
-& .\deploy-law.ps1 -CustomerName $customerName -logAnalytics '/subscriptions/f28acd55-79d1-49b7-a1ac-38e7939cf25f/resourcegroups/defaultresourcegroup-eus/providers/microsoft.operationalinsights/workspaces/workspace-0a61a6da-13ac-4417-a095-ce7495977127-eus'
+#& .\deploy-law.ps1 -CustomerName $customerName -logAnalytics '/subscriptions/f28acd55-79d1-49b7-a1ac-38e7939cf25f/resourcegroups/defaultresourcegroup-eus/providers/microsoft.operationalinsights/workspaces/workspace-0a61a6da-13ac-4417-a095-ce7495977127-eus'
