@@ -40,7 +40,7 @@
           "type": "Microsoft.Authorization/policyAssignments",
           "apiVersion": "2018-05-01",
           "name": "[variables('policyAssignmentName')]",
-          "location": "southcentralus",
+          "location": "centralus",
           "identity": {
               "type": "SystemAssigned"
           },
